@@ -1,11 +1,4 @@
 ﻿using DSA.Common;
-using DSA.InfixToPostfix;
-
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 
 namespace Tests.CommonTests;
 
@@ -19,8 +12,7 @@ public class EquationHelperTests
     [DataRow('c')]
     public void IsDigit_False(char value)
     {
-       
-        bool isDigit = EquationHelper.IsDigit(value);
+        bool isDigit = EquationHelpers.IsDigit(value);
         Assert.IsFalse(isDigit);
     }
     [TestMethod]
@@ -30,7 +22,7 @@ public class EquationHelperTests
     [DataRow('3')]
     public void IsDigit_True(char value)
     {
-        bool isDigit = EquationHelper.IsDigit(value);
+        bool isDigit = EquationHelpers.IsDigit(value);
         Assert.IsTrue(isDigit);
     }
 
@@ -43,7 +35,7 @@ public class EquationHelperTests
 
     public void HasValidParenthesis_True(string value)
     {
-        bool isValid = EquationHelper.HasValidParenthesis(value);
+        bool isValid = EquationHelpers.HasValidParenthesis(value);
         Assert.IsTrue(isValid);
     }
     [TestMethod]
@@ -55,7 +47,7 @@ public class EquationHelperTests
 
     public void HasValidParenthesis_False(string value)
     {
-        bool isValid = EquationHelper.HasValidParenthesis(value);
+        bool isValid = EquationHelpers.HasValidParenthesis(value);
         Assert.IsFalse(isValid);
     }
 
@@ -66,7 +58,7 @@ public class EquationHelperTests
     [DataRow('3')]
     public void IsOperator_False(char value)
     {
-        bool isValid = EquationHelper.IsOperator(value);
+        bool isValid = EquationHelpers.IsOperator(value);
         Assert.IsFalse(isValid);
     }
     [TestMethod]
@@ -76,7 +68,7 @@ public class EquationHelperTests
     [DataRow('*')]
     public void IsOperator_True(char value)
     {
-        bool isValid = EquationHelper.IsOperator(value);
+        bool isValid = EquationHelpers.IsOperator(value);
         Assert.IsTrue(isValid);
     }
 }

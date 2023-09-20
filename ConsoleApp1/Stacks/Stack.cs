@@ -1,7 +1,6 @@
 ﻿namespace DSA.Stacks;
 public class CustomStack<T>
 {
-
     private int top = -1;
     private T[] stack;
 

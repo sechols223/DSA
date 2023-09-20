@@ -28,22 +28,22 @@ public class InfixConverterTests
         foreach (string equation in equations)
         {
             Console.WriteLine("-----");
+            Console.WriteLine($"Infix: {equation}");
+
             try
             {
                 string postfix = infixConverter.ConvertToPostfix(equation);
-                float result = infixConverter.EvaluatePostfix(postfix);
-                Console.WriteLine($"Infix: {equation}");
+                double result = infixConverter.EvaluatePostfix(postfix);
+
+                
                 Console.WriteLine($"Postfix: {postfix}");
                 Console.WriteLine($"Result: {result} ");
             } catch (InvalidParenthesisException)
             {
 
-                Console.WriteLine("Invalid parenthesis");
+                Console.WriteLine("Invalid parentheses");
             }
-            finally
-            {
-                Console.WriteLine("-----");
-            }
+            
         }
         Assert.IsTrue(true);
     }

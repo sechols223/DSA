@@ -7,61 +7,54 @@ using System.Text;
 using System.Threading.Tasks;
 
 namespace DSA.Common;
-public static class EquationHelper
+public static class EquationHelpers
 {
     public static bool HasValidParenthesis(string equation)
     {
-        int length = equation.Length; 
-
-        if (length <= 0)
+        if (string.IsNullOrEmpty(equation))
         {
             return true;
         }
+        CustomStack<char> stack = new(equation.Length);
 
-        CustomStack<char> stack = new(length);
-
-        bool isValid = true;
-
-        for (int i = 0; i < length; i++)
+        for (int i = 0; i < equation.Length; i++)
         {
             char c = equation[i];
-            if (IsOpenParenthesis(c))
+
+            if (c == '(' || c == '[')
             {
                 stack.Push(c);
-            } 
-            else if (IsClosedParenthesis(c))
-            {
-                if (stack.IsEmpty() || !ParenthesisMatch(c, stack.Peek())) 
-                {
-                    return false;
-                }
-
-                stack.Pop();
             }
-            
+            else
+            {
+                if (c == ')')
+                {
+                    if (stack.IsEmpty() || stack.Pop() != '(')
+                    {
+                        return false;
+                    }
+                }
+                if (c == ']')
+                {
+                    if (stack.IsEmpty() || stack.Pop() != '[')
+                    {
+                        return false;
+                    }
+                }
+            }
         }
-        return isValid;
-    }
+        bool hasOpenLeftInStack = stack.IsEmpty();
 
-    public static bool IsDigit(char c)
-    {
-        return c >= '0' && c <= '9';
-    }
-    public static bool IsOperator(char c)
-    {
-        return c == '+' || c == '-' || c == '^' || c == '*' || c == '/'; 
+        return hasOpenLeftInStack;
     }
     public static bool IsOpenParenthesis(char c)
     {
-        char parenthesis = (char)('(' | '[');
-        return c == parenthesis;
+        return c == '(' || c == '[';
     }
     public static bool IsClosedParenthesis(char c)
     {
-        char parenthesis = (char)(')' | ']');
-        return c == parenthesis;
+        return c == ')' || c == ']';
     }
-
     public static double EvaluateOperator(double a, double b, char op)
     {
         if (op == '+')
@@ -87,8 +80,12 @@ public static class EquationHelper
         return double.MinValue;
     }
 
-    private static bool ParenthesisMatch(char opening, char closing)
+    public static bool IsDigit(char c)
     {
-        return (opening == '(' && closing == ')') || (opening == '[' && closing == ']');
+        return c >= '0' && c <= '9';
+    }
+    public static bool IsOperator(char c)
+    {
+        return c == '+' || c == '-' || c == '^' || c == '*' || c == '/';
     }
 }
