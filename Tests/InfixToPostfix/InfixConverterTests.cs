@@ -21,7 +21,7 @@ public class InfixConverterTests
     public void ConvertEquations()
     {
         InfixConverter infixConverter = new();
-        FileReader reader = new FileReader(@"C:\Users\cecho\source\repos\ConsoleApp1\Tests\Data\equations.txt");
+        FileReader reader = new FileReader(@"Data/equations.txt");
 
         string[] equations = reader.ReadLines();
 

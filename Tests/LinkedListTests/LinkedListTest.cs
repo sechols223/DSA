@@ -1,5 +1,4 @@
 ﻿using DSA.Common;
-using DSA.LinkedLists;
 
 namespace Tests.LinkedListTests;
 
@@ -29,6 +28,7 @@ public class LinkedListTest
     public void InsertAt_Pass()
     {
         DSA.LinkedLists.LinkedList<int> list = new();
+        
         list.Insert(12);
         list.Insert(14);
         list.Insert(15);
@@ -52,8 +52,8 @@ public class LinkedListTest
     {
         DSA.LinkedLists.LinkedList<string> list = new();
 
-        string path = @"C:\Users\cecho\source\repos\ConsoleApp1\Tests\Data\names.txt";
-        FileReader fileReader = new FileReader(path);
+        string path = "Data/names.txt";
+        FileReader fileReader = new(path);
 
         string[] lines = fileReader.ReadLines();
 
@@ -61,9 +61,7 @@ public class LinkedListTest
         {
             list.InsertOrdered(line);
         }
-
-
         list.PrintList();
-        Assert.IsTrue(list.Count > 0);
+        Assert.IsTrue(list.Length > 0);
     }
 }

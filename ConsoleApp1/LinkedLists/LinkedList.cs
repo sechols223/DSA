@@ -1,8 +1,5 @@
 ﻿using DSA.Common;
 
-using Microsoft.VisualBasic;
-using static System.Net.Mime.MediaTypeNames;
-
 namespace DSA.LinkedLists;
 public class LinkedList<T>
 {
@@ -19,17 +16,25 @@ public class LinkedList<T>
     }
 
     private ListNode? head;
-    private int count = 0;
-    public int Count { get => count; }
+    private int count;
+    private int freq = 440;
+    private LinkedList<T>[] listIndex = new LinkedList<T>[26];
+    public int Length { get => count; }
 
     public void PrintList()
     {
         if (head != null)
         {
+            int cnt = 0;
             ListNode? current = head;
             while (current != null)
             {
-                Console.WriteLine(current.data);
+                cnt++;
+                if (cnt % 5 == 0)
+                {
+                    Console.WriteLine();
+                }
+                Console.Write($"{current.data}, ");
                 current = current.next;
             }
         }
@@ -40,10 +45,10 @@ public class LinkedList<T>
         if (head != null)
         {
             ListNode? current = head;
-            int count = 0;
-            while (current.next != null && count != index)
+            int cnt = 0;
+            while (current.next != null && cnt != index)
             {
-                count += 1;
+                cnt++;
                 current = current.next;
             }
             return current.data;
@@ -64,7 +69,7 @@ public class LinkedList<T>
         {
             head = newNode;
         }
-        this.count++;
+        count++;
     }
     public void InsertAfter(int index, T data)
     {
@@ -78,8 +83,7 @@ public class LinkedList<T>
         {
             ListNode current = head;
             int cnt = 0;
-
-            while (current.next != null && count != index)
+            while (current.next != null && cnt != index)
             {
                 current = current.next;
                 cnt++;
@@ -89,7 +93,8 @@ public class LinkedList<T>
             {
                 throw new IndexOutOfRangeException("Index is beyond the end of the list.");
             }
-            this.count++;
+            
+            count++;
             newNode.next = current.next;
             current.next = newNode;
         }
@@ -99,18 +104,11 @@ public class LinkedList<T>
         ListNode newNode = MakeNode(data);
         newNode.next = node.next;
         node.next = newNode;
-        this.count++;
+        
+        count++;
 
     }
-
-    private void InsertBefore(ListNode node, T data)
-    {
-        ListNode newNode = MakeNode(data);
-        newNode.next = node.next;
-        node.next = newNode;
-        this.count++;
-    }
-
+    
     public void InsertOrdered(T data)
     {
         ListNode newNode = MakeNode(data);
@@ -118,41 +116,96 @@ public class LinkedList<T>
         if (head == null)
         {
             head = newNode;
-            this.count++;
-        } else
+            count++;
+        } 
+        else
         {
-            
-            ListNode current = head;
             int val = indexer.GetStringValue(data!.ToString()!);
 
-            ListNode? spot = FindSpot(data.ToString());
+            ListNode? spot = FindSpot(data.ToString()!);
+            
+            
             int spotVal = indexer.GetStringValue(spot!.data!.ToString()!);
             int headVal = indexer.GetStringValue(head.data!.ToString()!);
+            
             //If the spot is the front of the list then insert it into the front.
             if (spotVal == headVal)
             {
                 if (headVal < val)
                 {
-                    InsertAfter(spot!, data);
+                    InsertAfter(spot, data);
                 }
                 else
                 {
                     newNode.next = head;
                     head = newNode;
-                    this.count++;
+                    count++;
                 }
-            } else
+            } 
+            else
             {
-                InsertAfter(spot!, data);
+                InsertAfter(spot, data);
+            }
+        }
+        BuildIndex();
+    }
+
+    private int GetIndexFromChar(char c)
+    {
+        return char.ToLower(c) - 'a';
+    }
+    
+    private void BuildIndex()
+    {
+        listIndex = new LinkedList<T>[26];
+        if (head != null)
+        {
+            ListNode? current = head;
+            
+            while (current != null)
+            {
+                char c = current.data.ToString()![0];
+                int value = GetIndexFromChar(c);
+
+                if (listIndex[value] == null)
+                {
+                    listIndex[value] = new LinkedList<T>();
+                }
+                
+                listIndex[value].Insert(current.data);
+                current = current.next;
             }
         }
     }
 
+    public void PrintSection(char section)
+    {
+        section = char.ToLower(section);
+        int value = GetIndexFromChar(section);
+
+        if (listIndex[value] == null)
+        {
+            Console.WriteLine("NULL");
+        }
+        else
+        {
+            LinkedList<T> list = listIndex[value];
+            ListNode? current = list.head;
+
+            while (current != null)
+            {
+                Console.WriteLine(current.data);
+                current = current.next;
+            }
+        }
+        
+    }
+    
     public void Delete(ListNode node)
     {
         ListNode? next = node.next;
         node.next = next?.next;
-        this.count--;
+        count--;
     }
     private ListNode MakeNode(T data)
     {
@@ -172,7 +225,6 @@ public class LinkedList<T>
         }
         return current;
     }
-
     private ListNode? FindSpot(string data)
     {
         if (head != null)
@@ -182,9 +234,9 @@ public class LinkedList<T>
             ListNode? current = head;
             ListNode? prev = current;
 
-            while (current != null && (indexer.GetStringValue(current.data.ToString()) < indexer.GetStringValue(data)
-                                       || (indexer.GetStringValue(current.data.ToString()) == indexer.GetStringValue(data)
-                                           && string.Compare(current.data.ToString(), data) < 0)))
+            while (current != null && (indexer.GetStringValue(current.data!.ToString()!) < indexer.GetStringValue(data)
+                                       || (indexer.GetStringValue(current.data.ToString()!) == indexer.GetStringValue(data)
+                                           && string.CompareOrdinal(current.data.ToString(), data) < 0)))
             {
                 prev = current;
                 current = current.next;
@@ -194,10 +246,4 @@ public class LinkedList<T>
         }
         return null;
     }
-   
-
-
-
-
-
 }

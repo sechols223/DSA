@@ -15,7 +15,7 @@ public class FileReaderTests
     [TestMethod]
     public void ReadFile_Pass()
     {
-        string path = @"C:\Users\cecho\source\repos\ConsoleApp1\Tests\Data\names.txt";
+        string path = @"Data/names.txt";
         FileReader fileReader = new FileReader(path);
         string[] lines = fileReader.ReadLines();
 
