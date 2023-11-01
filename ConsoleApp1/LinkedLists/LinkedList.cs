@@ -8,16 +8,16 @@ public class LinkedList<T>
         public T? data;
         public ListNode? next;
 
-        public ListNode(object? data)
+        public ListNode(T? data)
         {
-            this.data = (T?) data;
+            this.data =  data;
             next = null;
         }
     }
 
     private ListNode? head;
     private int count;
-    private int freq = 440;
+
     private LinkedList<T>[] listIndex = new LinkedList<T>[26];
     public int Length { get => count; }
 
@@ -63,9 +63,10 @@ public class LinkedList<T>
         ListNode newNode = MakeNode(data);
         if (head != null)
         {
-            ListNode end = FindTail();
+            ListNode end = FindTail()!;
             end.next = newNode;
-        } else
+        } 
+        else
         {
             head = newNode;
         }
@@ -99,20 +100,18 @@ public class LinkedList<T>
             current.next = newNode;
         }
     }
-    public void InsertAfter(ListNode node, T data)
+    private void InsertAfter(ListNode node, T data)
     {
         ListNode newNode = MakeNode(data);
         newNode.next = node.next;
         node.next = newNode;
-        
         count++;
-
     }
     
     public void InsertOrdered(T data)
     {
         ListNode newNode = MakeNode(data);
-        Indexer indexer = new();
+       
         if (head == null)
         {
             head = newNode;
@@ -120,15 +119,13 @@ public class LinkedList<T>
         } 
         else
         {
-            int val = indexer.GetStringValue(data!.ToString()!);
+            int val = Indexer.GetStringValue(data!.ToString()!);
 
             ListNode? spot = FindSpot(data.ToString()!);
             
+            int spotVal = Indexer.GetStringValue(spot!.data!.ToString()!);
+            int headVal = Indexer.GetStringValue(head.data!.ToString()!);
             
-            int spotVal = indexer.GetStringValue(spot!.data!.ToString()!);
-            int headVal = indexer.GetStringValue(head.data!.ToString()!);
-            
-            //If the spot is the front of the list then insert it into the front.
             if (spotVal == headVal)
             {
                 if (headVal < val)
@@ -149,11 +146,6 @@ public class LinkedList<T>
         }
         BuildIndex();
     }
-
-    private int GetIndexFromChar(char c)
-    {
-        return char.ToLower(c) - 'a';
-    }
     
     private void BuildIndex()
     {
@@ -164,8 +156,8 @@ public class LinkedList<T>
             
             while (current != null)
             {
-                char c = current.data.ToString()![0];
-                int value = GetIndexFromChar(c);
+                char c = current.data!.ToString()![0];
+                int value = Indexer.GetCharValue(c);
 
                 if (listIndex[value] == null)
                 {
@@ -181,7 +173,7 @@ public class LinkedList<T>
     public void PrintSection(char section)
     {
         section = char.ToLower(section);
-        int value = GetIndexFromChar(section);
+        int value = Indexer.GetCharValue(section);
 
         if (listIndex[value] == null)
         {
@@ -200,6 +192,26 @@ public class LinkedList<T>
         }
         
     }
+
+    public int GetSectionLength(char section)
+    {
+        section = char.ToLower(section);
+        int value = Indexer.GetCharValue(section);
+        int cnt = 0;
+        if (listIndex[value] != null)
+        {
+            LinkedList<T> list = listIndex[value];
+            ListNode? current = list.head;
+
+            while (current != null)
+            {
+                current = current.next;
+                cnt++;
+            }
+        }
+
+        return cnt;
+    }
     
     public void Delete(ListNode node)
     {
@@ -211,11 +223,11 @@ public class LinkedList<T>
     {
         return new ListNode(data);
     }
-    private ListNode FindTail()
+    private ListNode? FindTail()
     {
         if (head == null)
         {
-            return new ListNode(null);
+            return null;
         }
 
         ListNode current = head;
@@ -229,14 +241,10 @@ public class LinkedList<T>
     {
         if (head != null)
         {
-            Indexer indexer = new();
-
             ListNode? current = head;
             ListNode? prev = current;
 
-            while (current != null && (indexer.GetStringValue(current.data!.ToString()!) < indexer.GetStringValue(data)
-                                       || (indexer.GetStringValue(current.data.ToString()!) == indexer.GetStringValue(data)
-                                           && string.CompareOrdinal(current.data.ToString(), data) < 0)))
+            while (current != null && Indexer.GetStringValue(current.data!.ToString()!) <= Indexer.GetStringValue(data))
             {
                 prev = current;
                 current = current.next;

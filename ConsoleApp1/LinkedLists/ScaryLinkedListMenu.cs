@@ -53,6 +53,9 @@ public class ScaryLinkedListMenu
             case 2:
                 GetListLength();
                 break;
+            case 3:
+                GetSectionLength();
+                break;
             case 4:
                 DisplaySection();
                 break;
@@ -81,5 +84,20 @@ public class ScaryLinkedListMenu
         Console.WriteLine("-----Section-----");
         list.PrintSection(section);
         Console.WriteLine("\n--------------");
+    }
+
+    private void GetSectionLength()
+    {
+        Console.WriteLine("What Section's length would you like to display?");
+        char section = Console.In.ReadLine()![0];
+        if (char.IsLetter(section))
+        {
+            Console.WriteLine($"Length: {list.GetSectionLength(section)}");
+        }
+        else
+        {
+            Console.WriteLine("Unable to read section. Please try again");
+            GetSectionLength();
+        }
     }
 }

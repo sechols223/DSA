@@ -18,8 +18,8 @@ public class IndexerTests
     [DataRow('c', 2)]
     public void GetCharValue_Pass(char c, int value)
     {
-        Indexer indexer = new();
-        int val = indexer.GetCharValue(c);
+        
+        int val = Indexer.GetCharValue(c);
         Assert.IsTrue(val == value);
     }
 
@@ -27,9 +27,9 @@ public class IndexerTests
    
     public void GetStringValue_Pass() 
     { 
-        Indexer indexer = new();
-        int val1 = indexer.GetStringValue("joe");
-        int val2 = indexer.GetStringValue("mary");
+        
+        int val1 = Indexer.GetStringValue("joe");
+        int val2 = Indexer.GetStringValue("mary");
 
         Assert.IsTrue(val1 < val2);
     }
