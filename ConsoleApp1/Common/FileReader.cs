@@ -14,9 +14,21 @@ public class FileReader
 		this.path = path;
 	}
 
-	public string[] ReadLines()
+	public string[] ReadLines() => Read();
+	
+	public int[] ReadLinesAsInt()
+	{
+		string[] lineStrings = Read();
+		int[] lines = lineStrings.Select(x => int.Parse(x)).ToArray();
+
+		return lines;
+	}
+	
+	
+	
+	private string[] Read()
 	{
 		return File.ReadAllLines(path);
 	}
-
+	
 }

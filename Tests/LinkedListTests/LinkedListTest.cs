@@ -57,10 +57,12 @@ public class LinkedListTest
 
         string[] lines = fileReader.ReadLines();
 
-        foreach(string line in lines )
+        foreach (string line in lines)
         {
             list.InsertOrdered(line);
+
         }
+
         list.PrintList();
         Assert.IsTrue(list.Length > 0);
     }
